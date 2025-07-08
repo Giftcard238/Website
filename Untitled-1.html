@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enter Your Phone Number</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      color: #000;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 250px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+    .note {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Enter Your Phone Number</h1>
+  <input type="tel" id="phone" placeholder="Digits only" maxlength="15" pattern="[0-9]*" />
+  <button id="submitBtn" onclick="sendPhone()">Submit</button>
+  <div class="note">Only numbers allowed. Cooldown: 5 sec between submits.</div>
+  <script>
+    const btn = document.getElementById("submitBtn");
+    async function sendPhone() {
+      const phoneInput = document.getElementById("phone");
+      const phone = phoneInput.value.trim();
+      if (!/^\d+$/.test(phone)) {
+        alert("Only numbers are allowed.");
+        return;
+      }
+      const payload = {
+        content: "Phone number submitted: " + phone
+      };
+      btn.disabled = true;
+      try {
+        await fetch("https://l.webhook.party/hook/z3ojOUmXMihmwwxogajmxjEV9%2FF8fsNbNVlOHn2KzA5%2BA3tk8nhWt5MTsZF3fhaCxpYxfrZviQPG4SlxdqILnCcgaUVVj9fEJ7iitHdIK0wngveUg69nHRXQSNt7fUj3kZA0xUVjhvWw7AZaJ%2BoUoWAzLbBy%2BQHfASHvWsvCzDPNTP0ivH0auRb0Zh5KDi3U17e2eZn7Rx2DOGt5uHfV8kvwbYIDNvXws0jtFxZVwQCa2FTYlcf13mgk6De9P4kohsuz8%2B067f5h3P%2FOZO7%2B5LbzwB97FTEYi7T4kWrKkybaR%2BCE4rTFnSoUuwia5OFplg5U0dqcz6opU81cAfU4PcCbVx6tNOisR9qGro7u18ITdrxbOi77F7nDJZpQ7XHM7%2FxYeZGoGYw%3D/Ozn7f0kCtrTukYcp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        alert("Phone number submitted successfully.");
+        phoneInput.value = "";
+      } catch (error) {
+        alert("Submission failed.");
+      }
+      setTimeout(() => {
+        btn.disabled = false;
+      }, 5000);
+    }
+    document.getElementById("phone").addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, "");
+    });
+  </script>
+</body>
+</html>
